@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidebar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: #161616;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .sidebar {
+      width: 190px;
+      background-color: #111111;
+      padding: 13px 10px 500px 1px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6px 22px 6px;
+    }
+
+    .back-btn {
+      cursor: pointer;
+      width: 22px;
+      height: 23px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+	  margin-left: -5px;
+    }
+    .back-btn .back-icon {
+      width: 17px;
+      height: 17px;
+      display: block;
+      margin-left: 0;
+    }
+    .back-btn .back-icon polyline,
+    .back-btn .back-icon line {
+      stroke: #696a60;
+      stroke-width: 2.5;
+      transition: stroke 0.15s ease;
+    }
+    .back-btn:hover .back-icon polyline,
+    .back-btn:hover .back-icon line {
+      stroke: #8a8b7e;
+	  stroke-linecap: round;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      justify-content: center;
+      padding-left: 50px;
+    }
+
+    .user-name {
+      color: #a7a5a3;
+      font-size: 11px;
+      font-weight: 500;
+	  margin-left: 8px;;
+    }
+
+    .user-icon-svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+      display: block;
+      flex-shrink: 0;
+      margin-left: 0;
+    }
+
+    .uk-flag {
+      display: block;
+      flex-shrink: 0;
+      opacity: 0.65;
+      margin-left: 0;
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      color: #696a61;
+      font-size: 10px;
+      font-weight: 650;
+      letter-spacing: -0.06em;
+      padding: 0px 12px 8px 12px;
+      text-transform: uppercase;
+      margin-top: -22px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      color: #D2C5B8;
+      font-size: 12px;
+      font-weight: 400;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .menu-item:hover {
+      background-color: #111111;
+      color: #d4cfc7;
+    }
+
+    /* ✅ CHỈ CHỈNH CHỮ "Create Ticket" — KÉO LÊN CHO CÂN VỚI ICON */
+    .menu-item .ticket-label {
+      position: relative;
+      top: -4px;
+    }
+
+    .menu-item i {
+      width: 18px;
+      height: 18px;
+      font-size: 14px;
+      text-align: center;
+      line-height: 18px;
+      color: #bebbb6;
+      flex-shrink: 0;
+      transition: color 0.15s ease;
+      margin-left: 0;
+    }
+    .menu-item:hover i { color: #ffffff; }
+
+    /* ICON HOME */
+    .menu-item .home-icon {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      stroke: #bebbb6;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.15s ease;
+      margin-left: -3px;
+    }
+    .menu-item:hover .home-icon { stroke: #ffffff; }
+
+    /* ICON PURCHASE */
+    .menu-item .purchase-icon {
+      width: 16px;
+      height: 13px;
+      flex-shrink: 0;
+      fill: #bebbb6;
+      transition: fill 0.15s ease;
+      margin-left: -2px;
+    }
+    .menu-item:hover .purchase-icon { fill: #ffffff; }
+
+    /* ICON DISCORD */
+    .menu-item .discord-icon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      fill: #c12fc8;
+      transition: fill 0.15s ease;
+      margin-left: -1px;
+    }
+    .menu-item.discord:hover .discord-icon { fill: #c12fc8; }
+
+    /* ICON BOOK (View Tickets) */
+    .menu-item .book-icon {
+      width: 18px;
+      height: 17px;
+      flex-shrink: 0;
+      display: block;
+      transition: stroke 0.15s ease;
+      margin-left: 0;
+    }
+    .menu-item:hover .book-icon path,
+    .menu-item:hover .book-icon line { stroke: #ffffff; }
+
+    /* ICON TICKET (Create Ticket) */
+    .menu-item .ticket-icon {
+      width: 23px;
+      height: 30px;
+      flex-shrink: 0;
+      fill: none;
+      stroke: #bebbb6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-left: -3px;
+      transition: stroke 0.15s ease;
+    }
+    .menu-item:hover .ticket-icon { stroke: #ffffff; }
+
+    /* ICON CLOUD (Web Config) */
+    .menu-item .cloud-icon {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      display: block;
+      margin-left: 0;
+    }
+    .menu-item .cloud-icon path {
+      stroke: #bebbb6;
+      stroke-width: 2.1;
+      transition: stroke 0.15s ease;
+    }
+    .menu-item:hover .cloud-icon path { stroke: #ffffff; }
+
+    /* ICON GRID (Config Browser) */
+    .menu-item .grid-icon {
+      width: 15.8px;
+      height: 15.8px;
+      flex-shrink: 0;
+      display: block;
+      margin-left: 0;
+    }
+    .menu-item .grid-icon rect,
+    .menu-item .grid-icon line {
+      stroke: #bebbb6;
+      stroke-width: 2.2;
+      transition: stroke 0.15s ease;
+    }
+    .menu-item:hover .grid-icon rect,
+    .menu-item:hover .grid-icon line { stroke: #ffffff; }
+
+    /* ICON CLOUD-DL (Download Lite) */
+    .menu-item .cloud-dl-icon {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      display: block;
+      margin-left: 0;
+    }
+    .menu-item .cloud-dl-icon path,
+    .menu-item .cloud-dl-icon line,
+    .menu-item .cloud-dl-icon polyline {
+      stroke: #bebbb6;
+      stroke-width: 2.1;
+      transition: stroke 0.15s ease;
+    }
+    .menu-item:hover .cloud-dl-icon path,
+    .menu-item:hover .cloud-dl-icon line,
+    .menu-item:hover .cloud-dl-icon polyline { stroke: #ffffff; }
+
+    .menu-item.discord { color: #c12fc8; }
+    .menu-item.discord:hover { color: #c12fc8; background-color: #111111; }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="sidebar-topbar">
+      <div class="back-btn">
+        <svg class="back-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke="#696a60" stroke-width="3"
+             stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="13,7 8,12 13,17"/>
+            <line x1="8" y1="12" x2="23.5" y2="12"/>
+          </g>
+        </svg>
+      </div>
+      <div class="user-info">
+        <!-- ✅ ĐÃ THÊM ID "player-name" ĐỂ JS CẬP NHẬT -->
+        <span class="user-name" id="player-name">21th7_</span>
+
+        <svg class="user-icon-svg" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <mask id="neckGap">
+              <rect x="0" y="0" width="36" height="36" fill="white"/>
+              <circle cx="18" cy="11" r="8" fill="black"/>
+            </mask>
+          </defs>
+          <path fill="#696a60" d="
+              M 29,23.5 
+              C 29,18.8 22.5,17.2 18,17.2 
+              C 13.5,17.2 7,18.8 7,23.5 
+              v 3.8 
+              A 2,2 0 0 0 9,29.3 h 18 
+              A 2,2 0 0 0 29,27.3 
+              v -3.8 Z" 
+              mask="url(#neckGap)"/>
+          <circle fill="#696a60" cx="18" cy="10" r="7"/>
+        </svg>
+
+      </div>
+
+      <svg class="uk-flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 473.68 473.68" width="19" height="20">
+        <defs>
+          <clipPath id="ukCircle">
+            <circle cx="236.84" cy="236.84" r="236.84"/>
+          </clipPath>
+        </defs>
+        <g clip-path="url(#ukCircle)">
+          <g>
+            <path style="fill:#29337A;" d="M41.712,102.641c-15.273,22.168-26.88,47.059-33.918,73.812h107.734L41.712,102.641z"/>
+            <path style="fill:#29337A;" d="M170.511,9.48c-27.288,7.947-52.56,20.628-74.814,37.168l74.814,74.814V9.48z"/>
+            <path style="fill:#29337A;" d="M101.261,430.982c20.874,14.607,44.195,25.915,69.25,33.211v-102.45L101.261,430.982z"/>
+            <path style="fill:#29337A;" d="M10.512,306.771c7.831,25.366,19.831,48.899,35.167,69.833l69.833-69.833H10.512z"/>
+          </g>
+          <g>
+            <path style="fill:#FFFFFF;" d="M45.619,97.144c-1.324,1.81-2.629,3.646-3.908,5.501l73.816,73.812H7.793 c-1.746,6.645-3.171,13.418-4.345,20.284h141.776L45.619,97.144z"/>
+            <path style="fill:#FFFFFF;" d="M95.767,427.074c1.802,1.343,3.654,2.621,5.493,3.908l69.25-69.242v102.45 c6.653,1.945,13.41,3.624,20.284,4.974V332.05L95.767,427.074z"/>
+            <path style="fill:#FFFFFF;" d="M5.25,286.487c1.47,6.873,3.205,13.642,5.258,20.284h105.001l-69.833,69.833 c7.595,10.377,16.017,20.115,25.168,29.12L190.08,286.487H5.25L5.25,286.487z"/>
+            <path style="fill:#FFFFFF;" d="M170.511,9.48v111.982l-74.815-74.81c-10.314,7.67-19.955,16.185-28.888,25.403l123.983,123.983 V4.506C183.921,5.864,177.164,7.547,170.511,9.48z"/>
+          </g>
+          <g>
+            <polygon style="fill:#D32030;" points="170.511,306.056 169.8,306.771 170.511,306.771"/>
+            <polygon style="fill:#D32030;" points="190.084,286.487 190.794,286.487 190.794,285.773"/>
+            <polygon style="fill:#D32030;" points="281.229,196.737 280.545,196.737 280.545,197.425"/>
+            <polygon style="fill:#D32030;" points="171.21,176.457 170.511,175.754 170.511,176.457"/>
+            <polygon style="fill:#D32030;" points="190.794,196.037 190.794,196.737 191.494,196.737"/>
+          </g>
+          <g>
+            <path style="fill:#252F6C;" d="M300.825,411.764v53.091c25.381-7.105,49.045-18.305,70.211-32.897l-57.526-57.526 C308.913,390.583,307.231,398.933,300.825,411.764z"/>
+            <path style="fill:#252F6C;" d="M313.812,108.471l62.799-62.799C354.05,29.15,328.456,16.559,300.824,8.818v54.538 C308.21,78.146,308.831,89.384,313.812,108.471z"/>
+            <path style="fill:#252F6C;" d="M427.029,377.984c15.815-21.275,28.141-45.29,36.147-71.213h-107.36L427.029,377.984z"/>
+            <path style="fill:#252F6C;" d="M465.887,176.457c-7.188-27.318-19.143-52.676-34.898-75.192l-75.2,75.192H465.887z"/>
+          </g>
+          <g>
+            <path style="fill:#E7E7E7;" d="M327.638,290.5l16.275,16.275l77.903,77.903c1.769-2.214,3.526-4.42,5.217-6.69l-71.213-71.213 h107.36c2.046-6.638,3.784-13.41,5.25-20.284H329.16C328.932,289.367,327.911,287.643,327.638,290.5z"/>
+            <path style="fill:#E7E7E7;" d="M311.352,120.348l70.607-70.615c-1.769-1.372-3.541-2.737-5.348-4.061l-62.799,62.799 C314.463,110.954,310.746,117.805,311.352,120.348z"/>
+            <path style="fill:#E7E7E7;" d="M300.825,58.992V8.814c-6.645-1.862-13.41-3.44-20.284-4.727v24.476 C288.088,36.745,294.853,47.022,300.825,58.992z"/>
+            <path style="fill:#E7E7E7;" d="M326.041,196.737h144.195c-1.171-6.866-2.599-13.635-4.345-20.284H355.793l75.2-75.192 C423.6,90.7,415.384,80.768,406.409,71.565l-84.702,84.694C323.988,171.622,325.009,180.544,326.041,196.737z"/>
+            <path style="fill:#E7E7E7;" d="M310.088,371.002l60.952,60.959c10.138-6.982,19.685-14.753,28.593-23.189l-80.173-80.177 C316.901,343.423,313.865,357.745,310.088,371.002z"/>
+            <path style="fill:#E7E7E7;" d="M280.545,442.301v27.28c6.873-1.279,13.635-2.865,20.284-4.727v-53.091 C294.853,423.738,288.088,434.13,280.545,442.301z"/>
+          </g>
+          <path style="fill:#D71F28;" d="M321.707,156.259l84.694-84.694c-7.625-7.831-15.8-15.119-24.446-21.832l-66.55,66.561 C318.363,128.657,319.706,142.808,321.707,156.259z"/>
+          <g>
+            <path style="fill:#D32030;" d="M225.019,0.292C228.965,0.101,232.899,0,236.836,0C232.876,0,228.935,0.101,225.019,0.292z"/>
+            <path style="fill:#D32030;" d="M236.836,473.68c-3.938,0-7.872-0.108-11.81-0.299C228.942,473.579,232.876,473.68,236.836,473.68z"/>
+            <path style="fill:#D32030;" d="M236.836,473.68c14.943,0,29.535-1.447,43.708-4.099v-27.28 C268.103,455.786,253.549,473.68,236.836,473.68z"/>
+          </g>
+          <g>
+            <path style="fill:#D71F28;" d="M470.232,196.737H327.911c1.885,29.704,1.657,60.249-0.681,89.75h141.2 c3.418-16.017,5.25-32.613,5.25-49.643C473.68,223.164,472.461,209.784,470.232,196.737z"/>
+            <path style="fill:#D71F28;" d="M327.638,290.5c-1.316,13.994-5.901,24.898-8.182,38.099l80.173,80.173 c7.932-7.517,15.347-15.557,22.183-24.094l-77.9-77.907L327.638,290.5z"/>
+          </g>
+          <path style="fill:#D32030;" d="M280.545,30.324V4.091C266.376,1.447,251.784,0,236.836,0C253.549,0,268.103,16.843,280.545,30.324z"/>
+          <g>
+            <path style="fill:#29337A;" d="M300.825,422.007c6.406-12.834,11.899-27.609,16.499-43.757l-16.499-16.499V422.007z"/>
+            <path style="fill:#29337A;" d="M319.377,102.906c-4.989-19.087-11.166-36.439-18.552-51.229v69.773L319.377,102.906z"/>
+          </g>
+          <g>
+            <path style="fill:#FFFFFF;" d="M332.234,295.092c0.269-2.857,0.512-5.725,0.744-8.605h-9.349L332.234,295.092z"/>
+            <path style="fill:#FFFFFF;" d="M300.825,121.451V51.674c-5.976-11.97-12.737-22.254-20.284-30.429v129.906l40.735-40.735 c-0.613-2.543-1.257-5.034-1.9-7.517L300.825,121.451z"/>
+            <path style="fill:#FFFFFF;" d="M281.229,196.737h52.429c-1.028-16.192-2.666-32.123-4.944-47.482L281.229,196.737z"/>
+            <path style="fill:#FFFFFF;" d="M280.545,452.432c7.547-8.182,14.308-18.459,20.284-30.429v-60.256l16.499,16.499 c3.784-13.264,6.959-27.434,9.525-42.261l-46.307-46.304L280.545,452.432L280.545,452.432z"/>
+          </g>
+          <path style="fill:#E51D35;" d="M280.545,452.432V289.681l46.304,46.307c2.277-13.205,4.069-26.899,5.381-40.896l-8.605-8.605h9.349 c2.337-29.502,2.565-60.047,0.681-89.75h-52.429l47.482-47.482c-2.001-13.455-4.476-26.469-7.434-38.836l-40.728,40.735V21.248 C268.103,7.763,253.549,0,236.836,0c-3.938,0-7.872,0.101-11.817,0.292c-11.649,0.583-23.073,2.016-34.225,4.215v191.531 L66.808,72.055c-7.618,7.861-14.704,16.237-21.189,25.089l79.313,79.313l20.291,20.284H3.448C1.227,209.784,0,223.164,0,236.844 c0,17.034,1.84,33.626,5.25,49.643h184.834L70.847,405.724c7.808,7.67,16.121,14.813,24.921,21.349l95.023-95.023v137.116 c11.151,2.199,22.583,3.631,34.232,4.215c3.938,0.191,7.872,0.299,11.81,0.299C253.549,473.68,268.103,465.917,280.545,452.432z"/>
+        </g>
+      </svg>
+
+    </div>
+
+    <div class="section">
+      <div class="section-title">Panel</div>
+
+      <div class="menu-item">
+        <svg class="home-icon" viewBox="0 0 32 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <g stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 4 16.5 L 16 6 L 28 16.5" />
+            <path d="M 25 14 L 25 10.5" />
+            <path d="M 7 14 V 24 H 13.5 V 18 H 18.5 V 24 H 25 V 14" />
+          </g>
+        </svg>
+        <span>Home</span>
+      </div>
+
+      <div class="menu-item">
+        <svg class="purchase-icon" viewBox="0 0 800 640" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill="currentColor" fill-rule="evenodd" d="
+            M 64 148 C 64 139 71 128 84 128 L 716 128 C 729 128 736 139 736 148 L 736 492
+            C 736 501 729 512 716 512 L 84 512 C 71 512 64 501 64 492 Z
+            M 112 176 L 688 176 L 688 464 L 112 464 Z
+            M 400 208 C 461.9 208 512 258.1 512 320 C 512 381.9 461.9 432 400 432
+            C 338.1 432 288 381.9 288 320 C 288 258.1 338.1 208 400 208 Z
+            M 380 252 C 369 252 360 261 360 272 C 360 281.7 366.9 289.7 376 291.6
+            L 376 340 L 372 340 C 361 340 352 349 352 360 C 352 371 361 380 372 380
+            L 420 380 C 431 380 440 371 440 360 C 440 349 431 340 420 340 L 416 340
+            L 416 272 C 416 261 407 252 396 252 L 380 252 Z"/>
+          <circle cx="112" cy="176" r="48.8" fill="currentColor"/>
+          <circle cx="688" cy="176" r="48.8" fill="currentColor"/>
+          <circle cx="112" cy="464" r="48.8" fill="currentColor"/>
+          <circle cx="688" cy="464" r="48.8" fill="currentColor"/>
+        </svg>
+        <span>Purchase</span>
+      </div>
+
+      <div class="menu-item discord">
+        <svg class="discord-icon" viewBox="0 0 512 512" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M442.53,0H69.47A53.87,53.87,0,0,0,15.6,53.87V407.65a53.87,53.87,0,0,0,53.87,53.87H374.23a5.81,5.81,0,0,0,5.57-7.47l-6.61-22.25a5.81,5.81,0,0,1,9.35-6.07l41.85,35.79.16.13L477,509a11.62,11.62,0,0,0,19.41-8.63V53.87A53.87,53.87,0,0,0,442.53,0ZM406.16,311.49c-30.64,38.18-74.24,38.58-81.15,38.39a2,2,0,0,1-1.5-.75l-15.32-19.42a2,2,0,0,1,.82-3.07c16.21-6.4,26.76-13.11,33.39-18.43a2,2,0,0,0-2-3.34c-30.71,13.83-89.69,22.13-93.86,22.7a1.77,1.77,0,0,1-.46,0c-4.17-.57-63.15-8.87-93.86-22.7a2,2,0,0,0-2,3.34c6.63,5.32,17.18,12,33.39,18.43a2,2,0,0,1,.82,3.07L169,349.13a2,2,0,0,1-1.5.75c-6.91.19-50.52-.21-81.15-38.39a2,2,0,0,1-.44-1.29c.18-9,2.88-99.19,39.68-153.34a1.85,1.85,0,0,1,.38-.41c3-2.35,35.64-27.5,76.14-27.4a2,2,0,0,1,1.36.54,2,2,0,0,1-.85,3.37c-9.54,2.49-36.43,10.19-55.06,22.07a2,2,0,0,0,1.78,3.52c18.66-7.23,55-18.69,96.9-18.37,41.94-.32,78.24,11.14,96.9,18.37A2,2,0,0,0,345,155c-18.63-11.88-45.52-19.58-55.06-22.07a2,2,0,0,1-.85-3.37h0a2,2,0,0,1,1.36-.54c40.5-.1,73.17,25,76.14,27.4a1.85,1.85,0,0,1,.38.41c36.8,54.15,39.5,144.37,39.68,153.34A2,2,0,0,1,406.16,311.49Z"/>
+          <circle cx="196.44" cy="254.86" r="27.98"/>
+          <circle cx="296.52" cy="254.86" r="27.98"/>
+        </svg>
+        <span>Discord</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Support</div>
+
+      <div class="menu-item">
+        <svg class="book-icon" viewBox="0 0 1024 1024"
+             preserveAspectRatio="none"
+             xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(0,1024) scale(0.1,-0.1)"
+             fill="none" stroke="#bebbb6" stroke-width="590"
+             stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2685 8156 c834 -116 1570 -291 2046 -487 156 -64 207 -90 307 -156
+              l82 -54 68 44 c180 118 368 198 727 309 449 138 932 240 1610 339 271 40 476
+              45 592 15 281 -71 506 -313 567 -608 14 -67 16 -309 16 -2144 1 -2055 0 -2070
+              -20 -2149 -53 -207 -184 -384 -368 -498 -122 -75 -226 -104 -449 -122 -1001
+              -82 -1840 -264 -2318 -503 -152 -76 -192 -85 -392 -90 -219 -5 -280 7 -460 92
+              -526 246 -1285 413 -2253 496 -148 12 -262 27 -308 40 -285 79 -517 324 -578
+              609 -21 101 -21 4167 1 4269 40 192 168 387 322 493 65 45 179 96 263 119 100
+              27 285 22 545 -14z"/>
+            <line x1="5120" y1="2100" x2="5120" y2="7400"/>
+          </g>
+        </svg>
+        <span>View Tickets</span>
+      </div>
+
+      <div class="menu-item">
+        <svg class="ticket-icon" viewBox="0 0 100 125" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="ticketClip">
+              <rect x="0" y="0" width="100" height="125"/>
+            </clipPath>
+          </defs>
+          <g transform="rotate(-135 50 50)" clip-path="url(#ticketClip)"
+             fill="none" stroke="#bebbb6" stroke-width="4.5"
+             stroke-linecap="round" stroke-linejoin="round">
+            <path d="M80.83,41.008l-7.478-7.476c-0.558-0.56-1.464-0.56-2.023,0c-0.649,0.649-1.513,1.008-2.431,1.008c-0.917,0-1.781-0.359-2.43-1.009c-0.65-0.65-1.007-1.513-1.007-2.431c0-0.918,0.356-1.781,1.007-2.43c0.268-0.269,0.418-0.634,0.418-1.012c0-0.38-0.15-0.743-0.418-1.012l-7.477-7.476c-0.559-0.56-1.465-0.56-2.023,0L19.172,56.969c-0.27,0.268-0.42,0.632-0.42,1.01c0,0.38,0.15,0.745,0.42,1.013l7.475,7.477c0.559,0.558,1.465,0.558,2.024,0c0.649-0.651,1.513-1.008,2.431-1.008s1.782,0.356,2.43,1.008c1.341,1.34,1.341,3.521,0,4.861c-0.558,0.559-0.558,1.464,0.002,2.024l7.477,7.476c0.267,0.269,0.631,0.419,1.01,0.419s0.744-0.151,1.012-0.419L80.83,43.032C81.387,42.472,81.387,41.566,80.83,41.008z"/>
+            <rect x="31" y="48.7" width="32" height="16" rx="3" ry="3"
+                  transform="rotate(135 50 54)"/>
+          </g>
+        </svg>
+        <span class="ticket-label">Create Ticket</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Lite</div>
+
+      <div class="menu-item">
+        <svg class="cloud-icon" viewBox="0 0 32 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(32, 0) scale(-1, 1)">
+            <path d="M 8.063 25.377 C 4.75 25.377 2.063 22.689 2.065 19.377 C 2.067 16.709 3.798 14.478 6.19 13.689 C 6.273 11.429 8.127 9.626 10.406 9.624 C 11.135 9.624 11.821 9.813 12.416 10.141 C 13.683 8.037 15.986 6.624 18.624 6.624 C 22.571 6.626 25.78 9.778 25.872 13.702 C 28.233 14.507 29.934 16.736 29.936 19.369 C 29.936 22.681 27.248 25.369 23.936 25.369 H 8.063 Z"
+                  fill="none" stroke="#bebbb6" stroke-width="11"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+        <span>Web Config</span>
+      </div>
+
+      <div class="menu-item">
+        <svg class="grid-icon" viewBox="0 0 32 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none"
+             stroke="#bebbb6"
+             stroke-width="14"
+             stroke-linecap="butt"
+             stroke-linejoin="miter">
+            <rect x="4" y="8" width="24" height="20" rx="1.8"/>
+            <line x1="16" y1="8" x2="16" y2="28"/>
+            <line x1="4" y1="18" x2="28" y2="18"/>
+          </g>
+        </svg>
+        <span>Config Browser</span>
+      </div>
+
+      <div class="menu-item">
+        <svg class="cloud-dl-icon" viewBox="0 0 32 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(32, 0) scale(-1, 1)">
+            <path d="M 8.063 25.377 C 4.75 25.377 2.063 22.689 2.065 19.377 C 2.067 16.709 3.798 14.478 6.19 13.689 C 6.273 11.429 8.127 9.626 10.406 9.624 C 11.135 9.624 11.821 9.813 12.416 10.141 C 13.683 8.037 15.986 6.624 18.624 6.624 C 22.571 6.626 25.78 9.778 25.872 13.702 C 28.233 14.507 29.934 16.736 29.936 19.369 C 29.936 22.681 27.248 25.369 23.936 25.369 H 8.063 Z"
+                  fill="none" stroke="#bebbb6" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <g fill="none" stroke="#bebbb6" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+              <line x1="16" y1="13" x2="16" y2="21"/>
+              <polyline points="12.5,17.5 16,21 19.5,17.5"/>
+            </g>
+          </g>
+        </svg>
+        <span>Download Lite</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       ✅ SCRIPT TỰ ĐỘNG LẤY TÊN USER
+       Sửa biến PLAYER_NAME_SOURCE bên dưới
+       ============================================ -->
+  <script>
+    // ⚙️ CHỌN NGUỒN LẤY TÊN — chỉ sửa 1 trong 3 dòng dưới
+
+    // 🔹 Cách 1: Nhập tay (mặc định)
+    const PLAYER_NAME = "21th7_";
+
+    // 🔹 Cách 2: Lấy từ URL ?name=YourName
+    // const PLAYER_NAME = new URLSearchParams(window.location.search).get('name') || '21th7_';
+
+    // 🔹 Cách 3: Lấy từ localStorage (FiveM/CEF thường dùng)
+    // const PLAYER_NAME = localStorage.getItem('playerName') || '21th7_';
+
+    // ⚠️ KHÔNG sửa gì bên dưới
+    document.getElementById('player-name').textContent = PLAYER_NAME;
+  </script>
+
+</body>
+</html>
